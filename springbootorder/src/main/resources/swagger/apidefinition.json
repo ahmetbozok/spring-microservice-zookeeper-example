@@ -1,0 +1,195 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is an order server API.\n",
+    "version": "1.0.0",
+    "title": "Order API"
+  },
+  "basePath": "/order",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/order":{
+      "post":{
+        "tags": [
+          "order"
+        ],
+        "summary": "Create an order with parameters",
+        "operationId": "createOrder",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "CreateOrderRequest",
+            "in": "body",
+            "description": "create order id",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/CreateOrderRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/CreateOrderResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BaseResponse":{
+      "discriminator": "baseResponseType",
+      "type": "object",
+      "required":[
+        "error",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "required": [
+        "name",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "required": [
+        "name",
+        "email"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "amount": {
+          "type": "integer"
+        },
+        "orderDate": {
+          "type": "string"
+        },
+        "customer": {
+          "$ref": "#/definitions/Customer"
+        },
+        "product": {
+          "$ref": "#/definitions/Product"
+        }
+      }
+    },
+    "ProductResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "required":[
+            "product"
+          ],
+          "properties": {
+            "product": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      ]
+    },
+    "CustomerResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "required":[
+            "customer"
+          ],
+          "properties": {
+            "customer": {
+              "$ref": "#/definitions/Customer"
+            }
+          }
+        }
+      ]
+    },
+    "CreateOrderResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "order": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        }
+      ]
+    },
+    "CreateOrderRequest": {
+      "type": "object",
+      "required": [
+        "customerId",
+        "productId",
+        "amount"
+      ],
+      "properties": {
+        "customerId": {
+          "type": "integer"
+        },
+        "productId": {
+          "type": "integer"
+        },
+        "amount": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

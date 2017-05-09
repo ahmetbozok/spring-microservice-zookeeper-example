@@ -1,0 +1,182 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a product server API.\n",
+    "version": "1.0.0",
+    "title": "Product API"
+  },
+  "basePath": "/product",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/products":{
+      "get":{
+        "tags": [
+          "products"
+        ],
+        "summary": "Product list",
+        "operationId": "products",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/ProductsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}":{
+      "get":{
+        "tags": [
+          "product"
+        ],
+        "summary": "Get product by userId",
+        "operationId": "getProduct",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "product id",
+            "required": "true"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/ProductResponse"
+            }
+          }
+        }
+      }
+    },
+    "/products/add":{
+      "post":{
+        "tags": [
+          "product"
+        ],
+        "summary": "Create new product",
+        "operationId": "createProduct",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "CreateProductRequest",
+            "in": "body",
+            "description": "Product object for creation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfuly created product",
+            "schema": {
+              "$ref": "#/definitions/ProductResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BaseResponse":{
+      "discriminator": "baseResponseType",
+      "type": "object",
+      "required":[
+        "error",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "required": [
+        "name",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "ProductsResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "products": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ProductResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "required":[
+            "product"
+          ],
+          "properties": {
+            "product": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        }
+      ]
+    },
+    "ProductRequest": {
+      "type": "object",
+      "required": [
+        "product"
+      ],
+      "properties": {
+        "product": {
+          "$ref": "#/definitions/Product"
+        }
+      }
+    }
+  }
+}

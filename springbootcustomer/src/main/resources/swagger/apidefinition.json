@@ -1,0 +1,182 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a customer server API.\n",
+    "version": "1.0.0",
+    "title": "Customer API"
+  },
+  "basePath": "/customer",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/customers":{
+      "get":{
+        "tags": [
+          "customers"
+        ],
+        "summary": "Customer list",
+        "operationId": "customers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/CustomersResponse"
+            }
+          }
+        }
+      }
+    },
+    "/customers/{userId}":{
+      "get":{
+        "tags": [
+          "customer"
+        ],
+        "summary": "Get customer by userId",
+        "operationId": "getCustomer",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "user id",
+            "required": "true"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/CustomerResponse"
+            }
+          }
+        }
+      }
+    },
+    "/customers/add":{
+      "post":{
+        "tags": [
+          "customer"
+        ],
+        "summary": "Create new customer",
+        "operationId": "createCustomer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "CreateCustomerRequest",
+            "in": "body",
+            "description": "Customer object for creation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfuly created customer",
+            "schema": {
+              "$ref": "#/definitions/CustomerResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BaseResponse":{
+      "discriminator": "baseResponseType",
+      "type": "object",
+      "required":[
+        "error",
+        "message"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "error": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "required": [
+        "name",
+        "email"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomersResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "customers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Customer"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CustomerResponse": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BaseResponse"
+        },
+        {
+          "type": "object",
+          "required":[
+            "customer"
+          ],
+          "properties": {
+            "customer": {
+              "$ref": "#/definitions/Customer"
+            }
+          }
+        }
+      ]
+    },
+    "CustomerRequest": {
+      "type": "object",
+      "required": [
+        "customer"
+      ],
+      "properties": {
+        "customer": {
+          "$ref": "#/definitions/Customer"
+        }
+      }
+    }
+  }
+}

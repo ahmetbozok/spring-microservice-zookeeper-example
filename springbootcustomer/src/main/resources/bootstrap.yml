@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: customer
+  cloud:
+    zookeeper:
+      discovery:
+        enabled: true

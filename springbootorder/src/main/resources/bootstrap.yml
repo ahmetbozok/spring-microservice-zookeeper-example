@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: order
+  cloud:
+    zookeeper:
+      discovery:
+        enabled: true
